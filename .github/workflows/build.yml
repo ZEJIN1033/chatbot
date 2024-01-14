@@ -9,54 +9,25 @@ on:
       - '*'
 
 jobs:
-  # python-formatting:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  python-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Setup Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.11
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
 
-  #     - name: Install flake8
-  #       run: pip install flake8
+      - name: Install flake8
+        run: pip install flake8
 
-  #     - name: Run flake8
-  #       run: flake8 api/
-
-  # pytest-check:
-  #   needs: python-formatting
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Use secret as environment variable
-  #       run: echo "database_key=${{ secrets.DATABASE_KEY }}" >> $GITHUB_ENV
-      
-  #     - name: Check if environment variable is set
-  #       run: |
-  #         if [ -z "$database_key" ]; then
-  #           echo "database_key is not set"
-  #         else
-  #           echo "database_key is set"
-  #         fi
-
-  #     - name: Setup Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.11
-
-  #     - name: Install requirements
-  #       run: pip install -r requirements.txt
-
-  #     - name: Run Pytest
-  #       run: pytest api/test_app.py
+      - name: Run flake8
+        run: flake8 api/
 
   deploy-to-vercel:
-    # needs: pytest-check
+    needs: python-formatting
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.ref == 'refs/pull/*/merge')
     steps:
